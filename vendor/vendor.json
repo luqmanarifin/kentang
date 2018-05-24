@@ -3,6 +3,12 @@
 	"ignore": "test",
 	"package": [
 		{
+			"checksumSHA1": "o0+6uQDysjh6+RsudtQDW3AOwec=",
+			"path": "github.com/joho/godotenv",
+			"revision": "1709ab122c988931ad53508747b3c061400c2984",
+			"revisionTime": "2018-04-05T05:36:34Z"
+		},
+		{
 			"checksumSHA1": "fWinr41nc8E3+CM2V5X9Y5MlIDw=",
 			"path": "github.com/line/line-bot-sdk-go/linebot",
 			"revision": "424c05552d2c288cf4c127e96b3a40000f7520fc",
