@@ -27,6 +27,7 @@ func main() {
 	)
 
 	http.HandleFunc("/healthz", handler.Healthz)
+	http.HandleFunc("/callback", handler.Callback)
 
 	// This is just sample code.
 	// For actual use, you must support HTTPS by using `ListenAndServeTLS`, a reverse proxy or something else.
