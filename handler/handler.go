@@ -1,26 +1,22 @@
 package handler
 
 import (
-	"log"
 	"net/http"
-	"os"
-
-	"github.com/line/line-bot-sdk-go/linebot"
 )
 
 type Handler struct {
-	bot *linebot.Client
+	// bot *linebot.Client
 }
 
 func NewHandler(channelSecret, channelToken string) *Handler {
-	bot, err := linebot.New(
-		os.Getenv("CHANNEL_SECRET"),
-		os.Getenv("CHANNEL_TOKEN"),
-	)
-	if err != nil {
-		log.Fatal(err)
-	}
-	return &Handler{bot: bot}
+	// bot, err := linebot.New(
+	// 	os.Getenv("CHANNEL_SECRET"),
+	// 	os.Getenv("CHANNEL_TOKEN"),
+	// )
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	return &Handler{}
 }
 
 //Healthz - health check
