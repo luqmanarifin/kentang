@@ -14,9 +14,9 @@ func main() {
 	// 	log.Fatal("Error loading .env file")
 	// }
 
-	// log.Printf("channel secret %s\n", os.Getenv("CHANNEL_SECRET"))
-	// log.Printf("channel token %s\n", os.Getenv("CHANNEL_TOKEN"))
-	// log.Printf("port %s\n", os.Getenv("PORT"))
+	log.Printf("channel secret %s\n", os.Getenv("CHANNEL_SECRET"))
+	log.Printf("channel token %s\n", os.Getenv("CHANNEL_TOKEN"))
+	log.Printf("port %s\n", os.Getenv("PORT"))
 
 	handler := handler.NewHandler(
 		os.Getenv("CHANNEL_SECRET"),
