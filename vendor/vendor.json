@@ -17,7 +17,6 @@
 	],
 	"heroku": {
         "install" : [ "./..." ],
-		"goVersion": "go1.10.1",
 		"sync": true
 	},
 	"rootPath": "github.com/luqmanarifin/kentang"
