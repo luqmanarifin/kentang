@@ -24,3 +24,9 @@ func (h *Handler) Healthz(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Write([]byte("{\"status\":\"ok\"}"))
 }
+
+//Index
+func (h *Handler) Index(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Write([]byte("{\"status\":\"ok\"}"))
+}
