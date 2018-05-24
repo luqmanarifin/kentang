@@ -10,12 +10,12 @@ import (
 )
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
+	if os.Getenv("APP_ENV") != "production" {
+		err := godotenv.Load()
+		if err != nil {
+			log.Fatal("Error loading .env file")
+		}
 	}
-
-	port := "5000"
 
 	log.Printf("channel secret %s\n", os.Getenv("CHANNEL_SECRET"))
 	log.Printf("channel token %s\n", os.Getenv("CHANNEL_TOKEN"))
@@ -31,7 +31,7 @@ func main() {
 
 	// This is just sample code.
 	// For actual use, you must support HTTPS by using `ListenAndServeTLS`, a reverse proxy or something else.
-	if err := http.ListenAndServe(":"+port, nil); err != nil {
+	if err := http.ListenAndServe(":"+os.Getenv("port"), nil); err != nil {
 		log.Fatal(err)
 	}
 }
