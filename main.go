@@ -26,7 +26,6 @@ func main() {
 		os.Getenv("CHANNEL_TOKEN"),
 	)
 
-	http.HandleFunc("/", handler.Index)
 	http.HandleFunc("/healthz", handler.Healthz)
 
 	// This is just sample code.
