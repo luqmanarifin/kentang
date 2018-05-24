@@ -1,0 +1,13 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "fWinr41nc8E3+CM2V5X9Y5MlIDw=",
+			"path": "github.com/line/line-bot-sdk-go/linebot",
+			"revision": "424c05552d2c288cf4c127e96b3a40000f7520fc",
+			"revisionTime": "2018-05-07T09:21:31Z"
+		}
+	],
+	"rootPath": "github.com/luqmanarifin/kentang"
+}
