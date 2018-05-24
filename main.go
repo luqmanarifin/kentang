@@ -5,14 +5,15 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/joho/godotenv"
 	"github.com/luqmanarifin/kentang/handler"
 )
 
 func main() {
-	// err := godotenv.Load()
-	// if err != nil {
-	// 	log.Fatal("Error loading .env file")
-	// }
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 
 	log.Printf("channel secret %s\n", os.Getenv("CHANNEL_SECRET"))
 	log.Printf("channel token %s\n", os.Getenv("CHANNEL_TOKEN"))
