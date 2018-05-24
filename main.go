@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -16,9 +15,9 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
-	fmt.Printf("channel secret %s\n", os.Getenv("CHANNEL_SECRET"))
-	fmt.Printf("channel token %s\n", os.Getenv("CHANNEL_TOKEN"))
-	fmt.Printf("port %s\n", os.Getenv("PORT"))
+	log.Printf("channel secret %s\n", os.Getenv("CHANNEL_SECRET"))
+	log.Printf("channel token %s\n", os.Getenv("CHANNEL_TOKEN"))
+	log.Printf("port %s\n", os.Getenv("PORT"))
 
 	handler := handler.NewHandler(
 		os.Getenv("CHANNEL_SECRET"),

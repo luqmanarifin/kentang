@@ -16,3 +16,6 @@
 
 # Vendor files
 /vendor/*/
+
+# Binary files
+kentang
