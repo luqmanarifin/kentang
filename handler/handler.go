@@ -8,6 +8,19 @@ import (
 	"github.com/line/line-bot-sdk-go/linebot"
 )
 
+var (
+	lineGreetingMessage = `Hi! Kentang's here. Add this bot to your group and count your friends koplaquness!`
+	lineHelpString      = `Here are available commands:
+add [keyword] [desc] -> Add keyword and description to us. We'll count your keyword afterward.
+remove [keyword] -> Remove specific keyword to count
+list -> Get all available keyword in this group
+[keyword] -> Increase 'keyword' count
+highschore -> Show highschore for this month
+statistics -> Show highscore for all the time, month, week, day
+reset -> reset all in this group
+help -> Show this`
+)
+
 type Handler struct {
 	bot *linebot.Client
 }
@@ -34,6 +47,30 @@ func (h *Handler) log(format string, args ...interface{}) {
 	log.Printf("[LINE] "+format, args...)
 }
 
+func (h *Handler) reply(event *linebot.Event, messages ...string) error {
+	var lineMessages []linebot.Message
+	for _, message := range messages {
+		lineMessages = append(lineMessages, linebot.NewTextMessage(message))
+	}
+	_, err := h.bot.ReplyMessage(event.ReplyToken, lineMessages...).Do()
+	if err != nil {
+		h.log("Error replying to %+v: %s", event.Source, err.Error())
+	}
+	return err
+}
+
+func (h *Handler) push(to string, messages ...string) error {
+	var lineMessages []linebot.Message
+	for _, message := range messages {
+		lineMessages = append(lineMessages, linebot.NewTextMessage(message))
+	}
+	_, err := h.bot.PushMessage(to, lineMessages...).Do()
+	if err != nil {
+		h.log("Error pushing to %s: %s", to, err.Error())
+	}
+	return err
+}
+
 func (h *Handler) Callback(w http.ResponseWriter, r *http.Request) {
 	events, err := h.bot.ParseRequest(r)
 	if err != nil {
@@ -46,14 +83,32 @@ func (h *Handler) Callback(w http.ResponseWriter, r *http.Request) {
 	}
 	for _, event := range events {
 		h.log("[EVENT][%s] Source: %#v", event.Type, event.Source)
-		if event.Type == linebot.EventTypeMessage {
+		switch event.Type {
+
+		case linebot.EventTypeJoin:
+			fallthrough
+		case linebot.EventTypeFollow:
+			h.handleFollow(event)
+
+		case linebot.EventTypeLeave:
+			fallthrough
+		case linebot.EventTypeUnfollow:
+			fallthrough
+
+		case linebot.EventTypeMessage:
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
-				_, err = h.bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.Text)).Do()
-				if err != nil {
-					log.Print(err)
-				}
+				h.handleTextMessage(event, message)
 			}
 		}
 	}
+}
+
+func (h *Handler) handleFollow(event *linebot.Event) {
+	message := lineGreetingMessage + lineHelpString
+	h.reply(event, message)
+}
+
+func (h *Handler) handleTextMessage(event *linebot.Event, message *linebot.TextMessage) {
+
 }
