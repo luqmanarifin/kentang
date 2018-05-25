@@ -242,6 +242,10 @@ func (h *Handler) handleHighscore(event *linebot.Event, tokens []string) {
 		return
 	}
 	p := util.EntriesToSortedMap(entries)
+	if len(p) == 0 {
+		h.reply(event, "No highscore")
+		return
+	}
 	message := "Highscore:"
 	for _, pair := range p {
 		message = message + "\n" + pair.Value + ": " + strconv.Itoa(pair.Key)
