@@ -202,6 +202,11 @@ func (h *Handler) handleRemove(event *linebot.Event, tokens []string) {
 		log.Printf("Error when deleting %s in %s\n", keyword, source)
 		return
 	}
+	err = h.mysql.RemoveEntryByKeyword(source, keyword)
+	if err != nil {
+		log.Printf("Error when deleting entries %s in %s", keyword, source)
+		return
+	}
 	h.reply(event, "Keyword "+keyword+" removed")
 }
 
