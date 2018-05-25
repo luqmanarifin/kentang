@@ -236,10 +236,10 @@ func (h *Handler) handleHighscore(event *linebot.Event, tokens []string) {
 		log.Printf("Error in fetching highscore")
 		return
 	}
-	m := util.EntriesToSortedMap(entries)
+	p := util.EntriesToSortedMap(entries)
 	message := "Highscore for this month:"
-	for key, value := range m {
-		message = message + "\n" + key + ": " + strconv.Itoa(value)
+	for _, pair := range p {
+		message = message + "\n" + pair.Value + ": " + strconv.Itoa(pair.Key)
 	}
 	h.reply(event, message)
 }

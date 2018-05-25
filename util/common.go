@@ -22,10 +22,10 @@ func (s ByKey) Swap(i, j int) {
 }
 
 func (s ByKey) Less(i, j int) bool {
-	return s[i].Key < s[j].Key
+	return s[i].Key > s[j].Key
 }
 
-func EntriesToSortedMap(entries []model.Entry) map[string]int {
+func EntriesToSortedMap(entries []model.Entry) []Pair {
 	m := make(map[string]int)
 	for _, entry := range entries {
 		m[entry.Keyword]++
@@ -39,10 +39,5 @@ func EntriesToSortedMap(entries []model.Entry) map[string]int {
 		})
 	}
 	sort.Sort(ByKey(pairs))
-
-	ret := make(map[string]int)
-	for _, pair := range pairs {
-		ret[pair.Value] = pair.Key
-	}
-	return ret
+	return pairs
 }

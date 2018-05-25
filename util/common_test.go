@@ -17,13 +17,17 @@ func TestEntriesToSortedMap(t *testing.T) {
 		model.Entry{Keyword: "niki"},
 		model.Entry{Keyword: "luq"},
 		model.Entry{Keyword: "luq"},
+		model.Entry{Keyword: "luq"},
+		model.Entry{Keyword: "luq"},
+		model.Entry{Keyword: "luq"},
+
 		model.Entry{Keyword: "niki"},
 		model.Entry{Keyword: "niki"},
 		model.Entry{Keyword: "bird"},
 		model.Entry{Keyword: "asu"},
 	}
 	m := EntriesToSortedMap(entries)
-	for key, value := range m {
-		log.Printf("%s: %d\n", key, value)
+	for _, pair := range m {
+		log.Printf("%s: %d\n", pair.Value, pair.Key)
 	}
 }
