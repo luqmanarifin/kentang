@@ -11,13 +11,13 @@ import (
 var (
 	lineGreetingMessage = `Hi! Kentang's here. Add this bot to your group and count your friends koplaquness!`
 	lineHelpString      = `Here are available commands:
-add [keyword] [desc] -> Add keyword and description to us. We'll count your keyword afterward.
-remove [keyword] -> Remove specific keyword to count
-list -> Get all available keyword in this group
-[keyword] -> Increase 'keyword' count
-highschore -> Show highschore for this month
-statistics -> Show highscore for all the time, month, week, day
-reset -> reset all in this group
+add [keyword] [desc]
+remove [keyword]
+list
+[keyword] -> Increase count
+highschore -> This month only
+statistics ->
+reset -> Reset all
 help -> Show this`
 )
 
@@ -105,7 +105,7 @@ func (h *Handler) Callback(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) handleFollow(event *linebot.Event) {
-	message := lineGreetingMessage + lineHelpString
+	message := lineGreetingMessage + "\n\n" + lineHelpString
 	h.reply(event, message)
 }
 
