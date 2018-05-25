@@ -248,7 +248,12 @@ func (h *Handler) handleHighscore(event *linebot.Event, tokens []string) {
 	}
 	message := "Highscore:"
 	for _, pair := range p {
-		message = message + "\n" + pair.Value + ": " + strconv.Itoa(pair.Key)
+		dict, err := h.mysql.GetDictionaryByKeyword(source, pair.Value)
+		if err != nil {
+			log.Printf("error when fetching desc")
+			return
+		}
+		message = message + "\n" + pair.Value + " - " + dict.Description + " : " + strconv.Itoa(pair.Key)
 	}
 	h.reply(event, message)
 }
