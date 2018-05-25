@@ -166,7 +166,7 @@ func (h *Handler) handleAdd(event *linebot.Event, tokens []string) {
 
 	dict, err := h.mysql.GetDictionaryByKeyword(source, keyword)
 	if dict.Keyword == keyword {
-		h.reply(event, "Keyword "+keyword+" already registered here before.")
+		h.reply(event, keyword+" is already here before.")
 		return
 	}
 	err = h.mysql.CreateDictionary(&model.Dictionary{
@@ -178,7 +178,7 @@ func (h *Handler) handleAdd(event *linebot.Event, tokens []string) {
 		log.Printf("Error when adding %s in %s\n", keyword, source)
 		return
 	}
-	h.reply(event, "Keyword "+keyword+" has been added")
+	h.reply(event, keyword+" has been added")
 }
 
 func (h *Handler) handleRemove(event *linebot.Event, tokens []string) {
@@ -194,7 +194,7 @@ func (h *Handler) handleRemove(event *linebot.Event, tokens []string) {
 		return
 	}
 	if dict.Keyword != keyword {
-		h.reply(event, "Keyword "+keyword+" hasn't been registered")
+		h.reply(event, "Keyword "+keyword+" is not exists")
 		return
 	}
 	err = h.mysql.RemoveDictionary(&dict)
@@ -202,7 +202,7 @@ func (h *Handler) handleRemove(event *linebot.Event, tokens []string) {
 		log.Printf("Error when deleting %s in %s\n", keyword, source)
 		return
 	}
-	h.reply(event, "Keyword "+keyword+" hasn't been removed")
+	h.reply(event, "Keyword "+keyword+" removed")
 }
 
 func (h *Handler) handleList(event *linebot.Event, tokens []string) {
@@ -216,10 +216,10 @@ func (h *Handler) handleList(event *linebot.Event, tokens []string) {
 		return
 	}
 	if len(dicts) == 0 {
-		h.reply(event, "No keyword registered at this time.")
+		h.reply(event, "No keyword registered.")
 		return
 	}
-	message := "Keywords registered in this group:"
+	message := "Keywords:"
 	for _, dict := range dicts {
 		message = message + "\n- " + dict.Keyword + ": " + dict.Description
 	}
@@ -237,7 +237,7 @@ func (h *Handler) handleHighscore(event *linebot.Event, tokens []string) {
 		return
 	}
 	p := util.EntriesToSortedMap(entries)
-	message := "Highscore for this month:"
+	message := "Highscore:"
 	for _, pair := range p {
 		message = message + "\n" + pair.Value + ": " + strconv.Itoa(pair.Key)
 	}
@@ -265,7 +265,7 @@ func (h *Handler) handleReset(event *linebot.Event, tokens []string) {
 		log.Printf("Error in resetting source in %s", source)
 		return
 	}
-	h.reply(event, "Has been reset")
+	h.reply(event, "All cleared up.")
 }
 
 func (h *Handler) handleHelp(event *linebot.Event, tokens []string) {
