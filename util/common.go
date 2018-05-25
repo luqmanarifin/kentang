@@ -26,7 +26,7 @@ func (s ByKey) Less(i, j int) bool {
 }
 
 func EntriesToSortedMap(entries []model.Entry) map[string]int {
-	var m map[string]int
+	m := make(map[string]int)
 	for _, entry := range entries {
 		m[entry.Keyword]++
 	}
@@ -40,7 +40,7 @@ func EntriesToSortedMap(entries []model.Entry) map[string]int {
 	}
 	sort.Sort(ByKey(pairs))
 
-	var ret map[string]int
+	ret := make(map[string]int)
 	for _, pair := range pairs {
 		ret[pair.Value] = pair.Key
 	}
