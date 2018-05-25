@@ -134,7 +134,7 @@ func (h *Handler) handleTextMessage(event *linebot.Event, message *linebot.TextM
 	log.Printf("Received message from %s: %s", source, message.Text)
 
 	tokens := strings.Split(message.Text, " ")
-	switch tokens[0] {
+	switch strings.ToLower(tokens[0]) {
 	case "add":
 		h.handleAdd(event, tokens)
 	case "remove":
