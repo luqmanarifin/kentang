@@ -165,10 +165,6 @@ func (h *Handler) handleAdd(event *linebot.Event, tokens []string) {
 	source := util.LineEventSourceToReplyString(event.Source)
 
 	dict, err := h.mysql.GetDictionaryByKeyword(source, keyword)
-	if err != nil {
-		log.Printf("Error when getting info when adding %s in %s\n", keyword, source)
-		return
-	}
 	if dict.Keyword == keyword {
 		h.reply(event, "Keyword "+keyword+" already registered here before.")
 		return
