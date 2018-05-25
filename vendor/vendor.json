@@ -9,10 +9,11 @@
 	"ignore": "test",
 	"package": [
 		{
-			"checksumSHA1": "iXQlbJJGmkkHPdBkDx8Ll1i1S1c=",
+			"checksumSHA1": "3nK7AESXhDcl+h0UlroHhzfxnSM=",
 			"path": "github.com/go-redis/redis",
 			"revision": "0f9028adf0837cf93c9705817493e5f6997cf026",
-			"revisionTime": "2018-05-24T07:10:05Z"
+			"revisionTime": "2018-05-24T07:10:05Z",
+			"tree": true
 		},
 		{
 			"checksumSHA1": "o0+6uQDysjh6+RsudtQDW3AOwec=",
