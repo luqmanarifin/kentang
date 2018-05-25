@@ -1,7 +1,19 @@
 {
 	"comment": "",
+	"heroku": {
+		"install": [
+			"./..."
+		],
+		"sync": true
+	},
 	"ignore": "test",
 	"package": [
+		{
+			"checksumSHA1": "iXQlbJJGmkkHPdBkDx8Ll1i1S1c=",
+			"path": "github.com/go-redis/redis",
+			"revision": "0f9028adf0837cf93c9705817493e5f6997cf026",
+			"revisionTime": "2018-05-24T07:10:05Z"
+		},
 		{
 			"checksumSHA1": "o0+6uQDysjh6+RsudtQDW3AOwec=",
 			"path": "github.com/joho/godotenv",
@@ -15,9 +27,5 @@
 			"revisionTime": "2018-05-07T09:21:31Z"
 		}
 	],
-	"heroku": {
-        "install" : [ "./..." ],
-		"sync": true
-	},
 	"rootPath": "github.com/luqmanarifin/kentang"
 }
