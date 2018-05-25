@@ -11,14 +11,14 @@ import (
 var (
 	lineGreetingMessage = `Hi! Kentang's here. Add this bot to your group and count your friends koplaquness!`
 	lineHelpString      = `Here are available commands:
-add [keyword] [desc]
-remove [keyword]
-list
-[keyword] -> Increase count
-highschore -> This month only
-statistics ->
-reset -> Reset all
-help -> Show this`
+- add [keyword] [desc]
+- remove [keyword]
+- list
+- [keyword] -> Increase count
+- highscore -> This month
+- statistics
+- reset
+- help -> Show this`
 )
 
 type Handler struct {
