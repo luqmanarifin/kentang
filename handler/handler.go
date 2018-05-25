@@ -30,6 +30,10 @@ func (h *Handler) Healthz(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("{\"status\":\"ok\"}"))
 }
 
+func (h *Handler) log(format string, args ...interface{}) {
+	log.Printf("[LINE] "+format, args...)
+}
+
 func (h *Handler) Callback(w http.ResponseWriter, r *http.Request) {
 	events, err := h.bot.ParseRequest(r)
 	if err != nil {
@@ -41,6 +45,7 @@ func (h *Handler) Callback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	for _, event := range events {
+		h.log("[EVENT][%s] Source: %#v", event.Type, event.Source)
 		if event.Type == linebot.EventTypeMessage {
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
