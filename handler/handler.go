@@ -321,5 +321,5 @@ func (h *Handler) handleKeyword(event *linebot.Event, tokens []string) {
 		log.Printf("Cannot add counter %s in %s\n", keyword, source)
 		return
 	}
-	h.reply(event, keyword+" lu")
+	h.reply(event, keyword+", "+dict.Description+" lagi?")
 }

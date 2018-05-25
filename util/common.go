@@ -22,7 +22,7 @@ func (s ByKey) Swap(i, j int) {
 }
 
 func (s ByKey) Less(i, j int) bool {
-	return s[i].Key > s[j].Key
+	return s[i].Key < s[j].Key
 }
 
 func EntriesToSortedMap(entries []model.Entry) map[string]int {
