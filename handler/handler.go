@@ -319,7 +319,7 @@ func (h *Handler) handleKeyword(event *linebot.Event, tokens []string) {
 	// find keyword on mysql
 	dict, err := h.mysql.GetDictionaryByKeyword(source, keyword)
 	if err != nil || dict.Keyword != keyword {
-		log.Printf("Can't found keyword %s in %s\n", keyword, source)
+		log.Printf("Can't found keyword %s in %s, found %s\n", keyword, source, dict.Keyword)
 		return
 	}
 	err = h.mysql.CreateEntry(&model.Entry{
