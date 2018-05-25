@@ -10,7 +10,7 @@ type Redis struct {
 	db *redis.Client
 }
 
-// Option holds all necessary options for Redis.
+// Option holds all necessary options for Redis
 type RedisOption struct {
 	Host     string
 	Port     string
