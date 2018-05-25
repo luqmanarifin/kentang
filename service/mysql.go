@@ -39,6 +39,12 @@ func (m *MySQL) CreateDictionary(d *model.Dictionary) error {
 	return err
 }
 
+func (m *MySQL) RemoveDictionaryBySource(source string) error {
+	_, err := m.db.Exec("DELETE FROM dictionaries WHERE source=?",
+		source)
+	return err
+}
+
 func (m *MySQL) RemoveDictionary(d *model.Dictionary) error {
 	_, err := m.db.Exec("DELETE FROM dictionaries WHERE source=? AND keyword=?",
 		d.Source, d.Keyword)
