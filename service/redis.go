@@ -1,24 +1,28 @@
 package service
 
-import "github.com/go-redis/redis"
+import (
+	"log"
+
+	"github.com/go-redis/redis"
+)
 
 type Redis struct {
 	db *redis.Client
 }
 
 // Option holds all necessary options for Redis.
-type Option struct {
+type RedisOption struct {
 	Host     string
 	Port     string
 	Password string
-	Database string
+	Database int
 }
 
-func NewRedis(opt Option) *Redis {
+func NewRedis(opt RedisOption) *Redis {
 	client := redis.NewClient(&redis.Options{
-		Addr: opt.Host+opt.Port,
-		Password: opt.Password
-		DB: opt.Database,
+		Addr:     opt.Host + opt.Port,
+		Password: opt.Password,
+		DB:       opt.Database,
 	})
 	pong, err := client.Ping().Result()
 	log.Println(pong, err)
