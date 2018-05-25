@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/line/line-bot-sdk-go/linebot"
+	"github.com/luqmanarifin/kentang/util"
 )
 
 var (
@@ -17,8 +18,8 @@ var (
 - [keyword] -> Increase count
 - highscore -> This month
 - statistics
-- reset
-- help -> Show this`
+- reset -> Reset all
+- help`
 )
 
 type Handler struct {
@@ -110,5 +111,7 @@ func (h *Handler) handleFollow(event *linebot.Event) {
 }
 
 func (h *Handler) handleTextMessage(event *linebot.Event, message *linebot.TextMessage) {
+	source := util.LineEventSourceToReplyString(event.Source)
+	log.Printf("Received message from %s: %s", source, message.Text)
 
 }
