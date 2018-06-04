@@ -56,6 +56,10 @@ func NewHandler(channelSecret, channelToken string) *Handler {
 	return &Handler{bot: bot, mysql: mysql}
 }
 
+func (h *Handler) Index(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("cok"))
+}
+
 //Healthz - health check
 func (h *Handler) Healthz(w http.ResponseWriter, r *http.Request) {
 	log.Printf("health\n")
