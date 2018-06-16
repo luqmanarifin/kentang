@@ -25,8 +25,8 @@ type MySQLOption struct {
 
 // NewMySQL returns a pointer of MySQL instance and error.
 func NewMySQL(opt MySQLOption) (*MySQL, error) {
-	db, _ := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s", opt.User, opt.Password, opt.Host, opt.Port, opt.Database, opt.Charset))
-	err := db.Ping()
+	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s", opt.User, opt.Password, opt.Host, opt.Port, opt.Database, opt.Charset))
+	// err := db.Ping()
 	if err != nil {
 		return &MySQL{}, err
 	}
