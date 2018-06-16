@@ -3,6 +3,7 @@ package service
 import (
 	"database/sql"
 	"fmt"
+	"log"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -29,7 +30,7 @@ func NewMySQL(opt MySQLOption) (*MySQL, error) {
 	if err != nil {
 		return &MySQL{}, err
 	}
-
+	log.Printf("Success connecting to %s:%s with credential %s:%s\n", opt.Host, opt.Port, opt.User, opt.Password)
 	return &MySQL{db: db}, nil
 }
 
