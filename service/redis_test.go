@@ -27,7 +27,7 @@ func getRedisConnection(t *testing.T) (*Redis, error) {
 func TestGetKeyword(t *testing.T) {
 	r, _ := getRedisConnection(t)
 	val, _ := r.GetKeyword("source", "kentang")
-	t.Logf("val %d", val)
+	t.Logf("val %s", val)
 }
 
 func TestAddKeyword(t *testing.T) {

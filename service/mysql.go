@@ -55,9 +55,8 @@ func (m *MySQL) RemoveDictionary(d *model.Dictionary) error {
 func (m *MySQL) GetDictionary(id int) (*model.Dictionary, error) {
 	var d *model.Dictionary
 
-	return d, nil
-
-	err := m.db.QueryRow("SELECT id, source, keyword, description, creator FROM dictionaries WHERE id = ?", id).Scan(d.ID, d.Source, d.Keyword, d.Description, d.Creator)
+	s := "SELECT id, source, keyword, description, creator FROM dictionaries WHERE id = ?"
+	err := m.db.QueryRow(s, id).Scan(d.ID, d.Source, d.Keyword, d.Description, d.Creator)
 	if err != nil {
 		return &model.Dictionary{}, err
 	}
