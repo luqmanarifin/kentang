@@ -3,6 +3,7 @@ package handler
 import (
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 	"strconv"
 	"strings"
@@ -29,6 +30,7 @@ var (
 type Handler struct {
 	bot   *linebot.Client
 	mysql *service.MySQL
+	redis *service.Redis
 }
 
 func NewHandler(channelSecret, channelToken string) *Handler {
@@ -53,7 +55,24 @@ func NewHandler(channelSecret, channelToken string) *Handler {
 		log.Fatalf("%s", err.Error())
 	}
 
-	return &Handler{bot: bot, mysql: mysql}
+	redisUrl, err := url.Parse(os.Getenv("REDIS_URL"))
+	if err != nil {
+		log.Fatalf("%s", err.Error())
+	}
+	password, _ := redisUrl.User.Password()
+	redisOpt := service.RedisOption{
+		Host:     redisUrl.Hostname(),
+		Port:     redisUrl.Port(),
+		Password: password,
+		Database: 0,
+	}
+	log.Printf("redis opt: %v", redisOpt)
+	redis, err := service.NewRedis(redisOpt)
+	if err != nil {
+		log.Fatalf("%s", err.Error())
+	}
+
+	return &Handler{bot: bot, mysql: mysql, redis: redis}
 }
 
 func (h *Handler) Index(w http.ResponseWriter, r *http.Request) {
@@ -168,6 +187,13 @@ func (h *Handler) handleAdd(event *linebot.Event, tokens []string) {
 	desc := tokens[2]
 	source := util.LineEventSourceToReplyString(event.Source)
 
+	val, err := h.redis.GetKeyword(source, keyword)
+
+	if err == nil && val != util.NOT_EXIST {
+		h.reply(event, keyword+" is already here before.")
+		return
+	}
+
 	dict, err := h.mysql.GetDictionaryByKeyword(source, keyword)
 	if dict.Keyword == keyword {
 		h.reply(event, keyword+" is already here before.")
@@ -184,6 +210,12 @@ func (h *Handler) handleAdd(event *linebot.Event, tokens []string) {
 		return
 	}
 	h.reply(event, keyword+" has been added")
+
+	err = h.redis.AddKeyword(source, keyword, desc)
+	if err != nil {
+		log.Printf("Error when adding cache %s in %s\n", keyword, source)
+		return
+	}
 }
 
 func (h *Handler) handleRemove(event *linebot.Event, tokens []string) {
@@ -192,6 +224,12 @@ func (h *Handler) handleRemove(event *linebot.Event, tokens []string) {
 	}
 	keyword := tokens[1]
 	source := util.LineEventSourceToReplyString(event.Source)
+
+	desc, err := h.redis.GetKeyword(source, keyword)
+	if err == nil && desc == util.NOT_EXIST {
+		h.reply(event, "Keyword "+keyword+" is not exists")
+		return
+	}
 
 	dict, err := h.mysql.GetDictionaryByKeyword(source, keyword)
 	if err != nil {
@@ -217,6 +255,11 @@ func (h *Handler) handleRemove(event *linebot.Event, tokens []string) {
 		return
 	}
 	h.reply(event, "Keyword "+keyword+" removed")
+
+	err = h.redis.RemoveKeyword(source, keyword)
+	if err != nil {
+		log.Printf("Error when deleting cache %s in %s\n", keyword, source)
+	}
 }
 
 func (h *Handler) handleList(event *linebot.Event, tokens []string) {
@@ -289,6 +332,12 @@ func (h *Handler) handleReset(event *linebot.Event, tokens []string) {
 		return
 	}
 	h.reply(event, "All cleared up.")
+
+	err = h.redis.RemoveAllKeyword(source)
+	if err != nil {
+		log.Printf("Error in resetting cache source in %s", source)
+		return
+	}
 }
 
 func (h *Handler) handleHelp(event *linebot.Event, tokens []string) {
@@ -328,7 +377,16 @@ func (h *Handler) handleKeyword(event *linebot.Event, tokens []string) {
 	keyword := tokens[0]
 	source := util.LineEventSourceToReplyString(event.Source)
 
-	// TODO: find keyword on redis first
+	// find keyword on redis first
+	ret, err := h.redis.GetKeyword(source, keyword)
+	if ret == util.NOT_EXIST {
+		log.Printf("%s is NOT exist in %s, based on cache", keyword, source)
+		return
+	} else if err == nil {
+		log.Printf("%s is exist in %s, based on cache", keyword, source)
+		h.addEntry(event, source, keyword, ret)
+		return
+	}
 
 	// find keyword on mysql
 	dict, err := h.mysql.GetDictionaryByKeyword(source, keyword)
@@ -336,7 +394,11 @@ func (h *Handler) handleKeyword(event *linebot.Event, tokens []string) {
 		log.Printf("Can't found keyword %s in %s, found %s\n", keyword, source, dict.Keyword)
 		return
 	}
-	err = h.mysql.CreateEntry(&model.Entry{
+	h.addEntry(event, source, keyword, dict.Description)
+}
+
+func (h *Handler) addEntry(event *linebot.Event, source, keyword, desc string) {
+	err := h.mysql.CreateEntry(&model.Entry{
 		Keyword: keyword,
 		Source:  source,
 	})
@@ -344,13 +406,22 @@ func (h *Handler) handleKeyword(event *linebot.Event, tokens []string) {
 		log.Printf("Cannot add counter %s in %s\n", keyword, source)
 		return
 	}
-	h.reply(event, keyword+", "+dict.Description+" lagi?")
+	h.reply(event, keyword+", "+desc+" lagi?")
 }
 
 func (h *Handler) getProfileName(userId string) string {
+	// look up from cache
+	name, _ := h.redis.GetDisplayName(userId)
+	if name != "" {
+		return name
+	}
+
+	// look up from database
 	profile, err := h.bot.GetProfile(userId).Do()
 	if err != nil {
 		return ""
 	}
+	// update cache
+	h.redis.SetDisplayName(userId, profile.DisplayName)
 	return profile.DisplayName
 }
