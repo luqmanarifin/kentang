@@ -400,6 +400,7 @@ func (h *Handler) handleKeyword(event *linebot.Event, tokens []string) {
 }
 
 func (h *Handler) addEntry(event *linebot.Event, source, keyword, desc string) {
+	h.reply(event, keyword+", "+desc+" lagi?")
 	err := h.mysql.CreateEntry(&model.Entry{
 		Keyword: keyword,
 		Source:  source,
@@ -408,7 +409,6 @@ func (h *Handler) addEntry(event *linebot.Event, source, keyword, desc string) {
 		log.Printf("Cannot add counter %s in %s\n", keyword, source)
 		return
 	}
-	h.reply(event, keyword+", "+desc+" lagi?")
 }
 
 func (h *Handler) getProfileName(userId string) string {

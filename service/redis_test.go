@@ -21,7 +21,7 @@ func getRedisConnection(t *testing.T) (*Redis, error) {
 		Password: os.Getenv("REDIS_PASSWORD"),
 		Database: database,
 	}
-	return NewRedis(opt), nil
+	return NewRedis(opt)
 }
 
 func TestGetKeyword(t *testing.T) {
