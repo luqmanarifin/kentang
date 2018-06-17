@@ -35,7 +35,7 @@ func NewMySQL(opt MySQLOption) (*MySQL, error) {
 }
 
 func (m *MySQL) CreateDictionary(d *model.Dictionary) error {
-	_, err := m.db.Exec("INSERT INTO dictionaries(source, keyword, description, creator, timestamp) VALUES(?, ?, ?, ?)",
+	_, err := m.db.Exec("INSERT INTO dictionaries(source, keyword, description, creator, timestamp) VALUES(?, ?, ?, ?, ?)",
 		d.Source, d.Keyword, d.Description, d.Creator, time.Now())
 	return err
 }

@@ -3,6 +3,7 @@ package service
 import (
 	"os"
 	"testing"
+	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/joho/godotenv"
@@ -40,6 +41,8 @@ func TestCreateDictionary(t *testing.T) {
 		Source:      "source",
 		Keyword:     "a",
 		Description: "b",
+		Creator:     "luqman",
+		Timestamp:   time.Now(),
 	}
 	err = m.CreateDictionary(dict)
 	if err != nil {
