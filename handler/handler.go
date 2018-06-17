@@ -391,9 +391,11 @@ func (h *Handler) handleKeyword(event *linebot.Event, tokens []string) {
 	// find keyword on mysql
 	dict, err := h.mysql.GetDictionaryByKeyword(source, keyword)
 	if err != nil || dict.Keyword != keyword {
+		h.redis.RemoveKeyword(source, keyword)
 		log.Printf("Can't found keyword %s in %s, found %s\n", keyword, source, dict.Keyword)
 		return
 	}
+	h.redis.AddKeyword(source, keyword, dict.Description)
 	h.addEntry(event, source, keyword, dict.Description)
 }
 
