@@ -177,6 +177,7 @@ func (h *Handler) handleAdd(event *linebot.Event, tokens []string) {
 		Source:      source,
 		Keyword:     keyword,
 		Description: desc,
+		Creator:     event.Source.UserID,
 	})
 	if err != nil {
 		log.Printf("Error when adding %s in %s\n", keyword, source)
@@ -199,6 +200,10 @@ func (h *Handler) handleRemove(event *linebot.Event, tokens []string) {
 	}
 	if dict.Keyword != keyword {
 		h.reply(event, "Keyword "+keyword+" is not exists")
+		return
+	}
+	if event.Source.UserID != dict.Creator {
+		h.reply(event, "Only the creator can remove it")
 		return
 	}
 	err = h.mysql.RemoveDictionary(&dict)
@@ -229,8 +234,8 @@ func (h *Handler) handleList(event *linebot.Event, tokens []string) {
 		return
 	}
 	message := "Keywords:"
-	for _, dict := range dicts {
-		message = message + "\n- " + dict.Keyword + ": " + dict.Description
+	for i, dict := range dicts {
+		message = message + "\n" + strconv.Itoa(i) + ". " + dict.Keyword + ": " + dict.Description + " (" + h.getProfileName(dict.Creator) + ")"
 	}
 	h.reply(event, message)
 }
@@ -340,4 +345,12 @@ func (h *Handler) handleKeyword(event *linebot.Event, tokens []string) {
 		return
 	}
 	h.reply(event, keyword+", "+dict.Description+" lagi?")
+}
+
+func (h *Handler) getProfileName(userId string) string {
+	profile, err := h.bot.GetProfile(userId).Do()
+	if err != nil {
+		return ""
+	}
+	return profile.DisplayName
 }

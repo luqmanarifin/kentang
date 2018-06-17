@@ -7,5 +7,6 @@ type Dictionary struct {
 	Source      string    `json:"source"`
 	Keyword     string    `json:"keyword"`
 	Description string    `json:"description"`
+	Creator     string    `json:"creator"`
 	Timestamp   time.Time `json:"timestamp"`
 }

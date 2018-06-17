@@ -35,8 +35,8 @@ func NewMySQL(opt MySQLOption) (*MySQL, error) {
 }
 
 func (m *MySQL) CreateDictionary(d *model.Dictionary) error {
-	_, err := m.db.Exec("INSERT INTO dictionaries(source, keyword, description, timestamp) VALUES(?, ?, ?, ?)",
-		d.Source, d.Keyword, d.Description, time.Now())
+	_, err := m.db.Exec("INSERT INTO dictionaries(source, keyword, description, creator, timestamp) VALUES(?, ?, ?, ?)",
+		d.Source, d.Keyword, d.Description, d.Creator, time.Now())
 	return err
 }
 
@@ -57,7 +57,7 @@ func (m *MySQL) GetDictionary(id int) (*model.Dictionary, error) {
 
 	return d, nil
 
-	err := m.db.QueryRow("SELECT id, source, keyword, description FROM dictionaries WHERE id = ?", id).Scan(d.ID, d.Source, d.Keyword, d.Description)
+	err := m.db.QueryRow("SELECT id, source, keyword, description, creator FROM dictionaries WHERE id = ?", id).Scan(d.ID, d.Source, d.Keyword, d.Description, d.Creator)
 	if err != nil {
 		return &model.Dictionary{}, err
 	}
@@ -68,7 +68,7 @@ func (m *MySQL) GetDictionary(id int) (*model.Dictionary, error) {
 func (m *MySQL) GetDictionaryByKeyword(source, keyword string) (model.Dictionary, error) {
 	var d model.Dictionary
 
-	err := m.db.QueryRow("SELECT id, source, keyword, description FROM dictionaries WHERE source = ? AND keyword = ?", source, keyword).Scan(&d.ID, &d.Source, &d.Keyword, &d.Description)
+	err := m.db.QueryRow("SELECT id, source, keyword, description, creator FROM dictionaries WHERE source = ? AND keyword = ?", source, keyword).Scan(&d.ID, &d.Source, &d.Keyword, &d.Description, d.Creator)
 	if err != nil {
 		return model.Dictionary{}, err
 	}
@@ -80,7 +80,7 @@ func (m *MySQL) GetAllDictionaries(source string) ([]model.Dictionary, error) {
 	var ds []model.Dictionary
 
 	rows, err := m.db.Query(`
-			SELECT id, source, keyword, description
+			SELECT id, source, keyword, description, creator
 			FROM dictionaries
 			WHERE source = ?
 	`, source)
@@ -92,7 +92,7 @@ func (m *MySQL) GetAllDictionaries(source string) ([]model.Dictionary, error) {
 	for rows.Next() {
 		var d model.Dictionary
 
-		if err = rows.Scan(&d.ID, &d.Source, &d.Keyword, &d.Description); err != nil {
+		if err = rows.Scan(&d.ID, &d.Source, &d.Keyword, &d.Description, &d.Creator); err != nil {
 			return ds, err
 		}
 
