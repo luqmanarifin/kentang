@@ -235,7 +235,7 @@ func (h *Handler) handleList(event *linebot.Event, tokens []string) {
 	}
 	message := "Keywords:"
 	for i, dict := range dicts {
-		message = message + "\n" + strconv.Itoa(i) + ". " + dict.Keyword + ": " + dict.Description + " (" + h.getProfileName(dict.Creator) + ")"
+		message = message + "\n" + strconv.Itoa(i+1) + ". " + dict.Keyword + ": " + dict.Description + " (" + h.getProfileName(dict.Creator) + ")"
 	}
 	h.reply(event, message)
 }

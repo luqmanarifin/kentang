@@ -68,7 +68,7 @@ func (m *MySQL) GetDictionary(id int) (*model.Dictionary, error) {
 func (m *MySQL) GetDictionaryByKeyword(source, keyword string) (model.Dictionary, error) {
 	var d model.Dictionary
 
-	err := m.db.QueryRow("SELECT id, source, keyword, description, creator FROM dictionaries WHERE source = ? AND keyword = ?", source, keyword).Scan(&d.ID, &d.Source, &d.Keyword, &d.Description, d.Creator)
+	err := m.db.QueryRow("SELECT id, source, keyword, description, creator FROM dictionaries WHERE source = ? AND keyword = ?", source, keyword).Scan(&d.ID, &d.Source, &d.Keyword, &d.Description, &d.Creator)
 	if err != nil {
 		return model.Dictionary{}, err
 	}
