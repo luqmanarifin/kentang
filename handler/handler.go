@@ -355,7 +355,7 @@ func (h *Handler) handleProfile(event *linebot.Event, tokens []string) {
 	if source.UserID != "" {
 		profile, err := h.bot.GetProfile(source.UserID).Do()
 		if err != nil {
-			h.reply(event, "Add me as your friend first! :)")
+			h.reply(event, "Add me first :)))")
 			return
 		}
 		if _, err := h.bot.ReplyMessage(
